@@ -35,22 +35,35 @@ def generate_samples(images: list, samples_size: list, n_samples: int = 3, threa
         os.makedirs("samples")
     sample = 0
     for img in images:
+        """Check samples if h!=w or else h = w = sample_size"""
+        h,w = None, None
+        if isinstance(samples_size[sample], tuple):
+            h, w = samples_size[sample]
+        else:
+            w = samples_size[sample]
+            h = samples_size[sample]
         """Constrain image bounds by sample size to not exceed image bounds on x and y choices"""
-        ranges_x = img.shape[1] - samples_size[sample]
-        ranges_y = img.shape[0] - samples_size[sample]
+        ranges_x = img.shape[1] - w
+        ranges_y = img.shape[0] - h
         """Generate x and y choices based on ranges of rows and columns"""
         try:
-            x_choices = random.choices([x for x in range(samples_size[sample], ranges_x)], k=n_samples)
-            y_choices = random.choices([y for y in range(samples_size[sample], ranges_y)], k=n_samples)
+            x_choices = random.choices([x for x in range(w, ranges_x)], k=n_samples)
+            y_choices = random.choices([y for y in range(h, ranges_y)], k=n_samples)
         except:
             raise AssertionError(f"Sample size of {samples_size[sample]} is too large to generate sub regions")
         """Loop over samples to generate (default = 3)"""
         for i in range(n_samples):
             """Calculate image regions by getting opencv2 top/bottom left/right coordinates"""
-            top_left_x = x_choices[i] - samples_size[sample]
-            top_left_y = y_choices[i] - samples_size[sample] // 2
-            bottom_right_x = x_choices[i] + samples_size[sample] // 2
-            bottom_right_y = y_choices[i] + samples_size[sample] // 2
+            if w != None and h !=None:
+                top_left_x = x_choices[i] - w
+                top_left_y = y_choices[i] - h // 2
+                bottom_right_x = x_choices[i] + w // 2
+                bottom_right_y = y_choices[i] + h // 2
+            else:
+                top_left_x = x_choices[i] - samples_size[sample]
+                top_left_y = y_choices[i] - samples_size[sample] // 2
+                bottom_right_x = x_choices[i] + samples_size[sample] // 2
+                bottom_right_y = y_choices[i] + samples_size[sample] // 2
             """Assert that the sub image patch does not exceed main image bounds"""
             if top_left_x < 0 or top_left_y < 0 or bottom_right_x > img.shape[1] or bottom_right_y > img.shape[0]:
                 raise AssertionError("Sample region is outside of image constraints!")
