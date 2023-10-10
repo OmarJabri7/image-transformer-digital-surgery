@@ -29,4 +29,4 @@ if __name__ == "__main__":
     """Assert input data is correct and logical"""
     assert_inputs(images, samples_size)
     """Store random image samples into results folder for each image in images"""
-    generate_samples(images, samples_size, n_samples=3, threaded = False)
+    generate_samples(images, samples_size, n_samples=3)
