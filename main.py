@@ -4,7 +4,7 @@ if __name__ == "__main__":
     """Extract images from data folder"""
     img_dir = input("Input images folder\n")
     try:
-        images = read_images(img_dir)
+        images, names = read_images(img_dir)
     except Exception as e:
         raise e
     if len(images) == 0:
@@ -29,4 +29,4 @@ if __name__ == "__main__":
     """Assert input data is correct and logical"""
     assert_inputs(images, samples_size)
     """Store random image samples into results folder for each image in images"""
-    generate_samples(images, samples_size, n_samples=3)
+    generate_samples(images, names, samples_size, n_samples=3)
