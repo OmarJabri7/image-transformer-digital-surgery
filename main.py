@@ -3,7 +3,7 @@ from utils import read_images, assert_inputs, generate_samples, random
 if __name__ == "__main__":
     """Extract images from data folder"""
     img_dir = input("Input images folder\n")
-    is_test = input("Generate test cases ? (Y/N)\n")
+    is_test = input("Generate test cases (Random samples) ? (Y/N)\n")
     if is_test not in ["Y", "N"]:
         raise AttributeError("Answer should be Y or N!")
     try:
